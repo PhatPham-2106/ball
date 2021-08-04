@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="Description" content="Enter your description here" />
+    <title>Circle</title>
+    <script src="circle.js"></script>
+</head>
+
+<body>
+    <canvas id="myPaper" height="400px" width="700px" style="background-color: rgba(37, 197, 32, 0.308);
+ position: relative;left: 540px;"></canvas>
+</body>
+<script>
+    let paper = document.getElementById('myPaper');
+    let pen = paper.getContext('2d')
+    // let x=100
+    // let y=100
+    let circles=[];
+    createCircle()
+    function move(){
+        pen.clearRect(0, 0, paper.width, paper.height)
+        for(let i=0;i<circles.length;i++){
+            circles[i].moveRight();
+            circles[i].renderImage(paper);
+            if(circles[i].x+circles[i].radius>=paper.width || circles[i].x <= 0){
+                circles[i].speed= -circles[i].speed;
+            }
+        }
+      
+    }
+    setInterval(move,200);
+    function createCircle() {
+        pen.clearRect(0, 0, paper.width, paper.height)
+        for (let i = 0; i < 20; i++) {
+            let r = randomNumber(20, 60);
+            let x = randomNumber(r, paper.width - r);
+            let y = randomNumber(r, paper.height - r);
+            let color = randomColor()
+            let speed= randomNumber(1,7)
+            //DrawCicle(x, y, r, color);
+            let circle=new Circle(x,y,r,color,speed)
+            circles.push(circle);
+        }
+    }
+
+    // setInterval(createCircle,1000)
+    function randomNumber(max, min) {
+        return Math.floor(Math.random() * (max - min) + min);
+    }
+
+    function randomColor() {
+        let r = randomNumber(0, 255);
+        let g = randomNumber(0, 255);
+        let b = randomNumber(0, 255);
+        let rgb = `rgb(${r},${g},${b})`
+        return rgb;
+    }
+
+    function DrawCicle(x, y, r, color) {
+        pen.beginPath();
+        pen.arc(x, y, r, 0, Math.PI * 2);
+        pen.fillStyle = color;
+        pen.fill();
+        pen.closePath()
+    }
+</script>
+
+</html>
